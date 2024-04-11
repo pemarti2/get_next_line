@@ -12,33 +12,46 @@
 
 #include "get_next_line.h"
 
+#ifndef BUFFER_SIZE
+	#define BUFFER_SIZE 2000
+#endif
+
 char	*get_next_line(int fd)
 {
-	ssize_t	read_bytes;
-	char	*line;
-	char	buf[1];
-
-	line = "";
-	read_bytes = 1;
-	while (read_bytes >= 1)
+	static size_t	i;
+	static char		buffer[BUFFER_SIZE];
+	ssize_t			read_bytes;
+	char			*line;
+	
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	line = NULL, read_bytes = 1;
+	if (i == 0)
+		read_bytes = read(fd, buffer, BUFFER_SIZE);
+	while (read_bytes > 0)
 	{
-		read_bytes = read(fd, buf, 1);
-		if (read_bytes != 1)
-			return (NULL);
-		if (read_bytes == 1)
-			line = ft_concatenate(line, buf[0]);
-		if (buf[0] == '\n')
-			break ;
+		if (i == BUFFER_SIZE)
+			read_bytes = read(fd, buffer, BUFFER_SIZE), i = 0;
+		else 
+		{
+			line = ft_concatenate(line, buffer[i]);
+			if (line == NULL)
+				return (NULL);
+			if (buffer[i] == '\n')
+				{
+					i++;
+					break ;
+				}
+			i++;
+		}
 	}
 	return (line);
 }
-
 /*
 int main ()
 {
 	int fd;
 	char *line;
-	char buffer[1];
 	int	i;
 
 	i = 1;
@@ -47,7 +60,7 @@ int main ()
         printf("Error: Cannot open file\n");
         return 1;
     }
-	
+	printf("payaso fd: %d\n", fd);
 	line = get_next_line(fd);
 	printf("fd: %d\n", fd);
 	while (line)
@@ -61,4 +74,5 @@ int main ()
 
 	return (0);
 }
+
 */

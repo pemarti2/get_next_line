@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                                    :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pemarti2 <pemarti2@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -22,13 +22,16 @@ size_t	ft_strlen(char *str)
 	return (i);
 }
 
-char	*ft_concatenate(char *s1, int letter)
+char	*ft_concatenate(char *s1, char letter)
 {
 	char	*new;
 	size_t	i;
 	
 	i = 0;
-	new = malloc(ft_strlen(s1) + 2);
+	if (s1 != NULL)
+		new = malloc(sizeof(char) * (ft_strlen(s1) + 2));
+	else
+		new = malloc(sizeof(char) * 2);
 	if (new == NULL)
 		return (NULL);
 	while (s1 && s1[i] != '\0')

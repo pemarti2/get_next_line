@@ -21,6 +21,6 @@
 
 char	*get_next_line(int fd);
 size_t	ft_strlen(char *str);
-char	*ft_concatenate(char *s1, int letter);
+char	*ft_concatenate(char *s1, char letter);
 
 #endif
